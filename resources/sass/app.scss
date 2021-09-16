@@ -1,0 +1,97 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+/*@import '../css/from_template/skel-noscript';*/
+@import '../css/from_template/style';
+/*@import '../css/from_template/style-1000px';
+@import '../css/from_template/style-desktop';
+@import '../css/from_template/style-mobile';*/
+body {
+	background: #ffffff;
+}
+/* контейнер просто содержит узлы.
+ Узел сам будет отвечать за свой отступ */
+.category-container {
+        padding: 0;
+        margin: 0;
+}
+
+.category-container li {
+        list-style-type: none; /* убрать кружочки/точечки */
+}
+
+/* узел отодвинут от левой стенки контейнера на 18px
+    благодаря этим отступам вложенные узлы формируют иерархию
+ */
+.node {
+    margin-left: 18px;
+    zoom: 1; /* спецсвойство против багов IE6,7. Ставит hasLayout */
+}
+
+/* Корневой узел от родительского контейнера не отодвинут. 
+   Ему же не надо демонстрировать отступом, чей он сын.
+   Это правило идет после .Node, поэтому имеет более высокий приоритет 
+   Так что class="Node IsRoot" дает margin-left:0
+*/ 
+.is-root {
+    margin-left: 0;
+}
+
+/* иконка скрытого/раскрытого поддерева или листа
+    сами иконки идут дальше, здесь общие свойства
+ */
+.expand {
+    width: 18px;
+    height: 18px;
+    /* принцип двухколоночной верстки. */
+    /* float:left и width дива Expand + margin-left дива Content */
+    float: left; 
+}
+
+/* содержание (заголовок) узла */
+ .content {
+    /* чтобы не налезать на Expand */
+    margin-left:18px;
+    /* высота заголовка - как минимум равна Expand 
+        Т.е правая колонка всегда выше или равна левой.
+        Иначе нижний float будет пытаться разместиться на получившейся ступеньке
+    */    
+    min-height: 18px; 
+}
+
+ /* все правила после * html выполняет только IE6 */
+* html .content {
+    height: 18px; /* аналог min-height для IE6 */
+}
+
+/* открытое поддерево */
+.expand-open .expand:before {  
+    content: "\2212";  
+}
+
+/* закрытое поддерево */
+.expand-closed .expand:before {
+    content: "\002B";
+}
+
+.expand-leaf .expand:before {
+    content: "\00a0 ";
+}
+
+.expand-open .category-container {
+	display: block;
+}
+
+.expand-closed .category-container {
+	display: none;
+}
+
+.expand-open .expand, .expand-closed .expand {
+	cursor: pointer; /* иконки скрытия-раскрытия */
+}
