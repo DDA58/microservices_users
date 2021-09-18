@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserProfileUpdated;
 use App\Models\User;
+use App\Services\EventDispatcher\IEventDispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse as Response;
 
 class UserController extends Controller
 {
-    public function __construct() {
+    private IEventDispatcher $dispatcher;
+
+    public function __construct(IEventDispatcher $dispatcher) {
         $this->middleware('auth:api');
+        $this->dispatcher = $dispatcher;
     }
 
     public function show(User $user): Response {
@@ -25,6 +30,9 @@ class UserController extends Controller
 
         $user->update($data);
 
+        $this->dispatcher->dispatch(
+            new UserProfileUpdated($user)
+        );
         return response()->json(['message' => 'Update success', 'token' => auth()->tokenById($user->id)]);
     }
 }

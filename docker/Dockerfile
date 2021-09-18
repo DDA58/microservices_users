@@ -30,7 +30,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 #     chown -R $user:$user /home/$user
 
 # Set working directory
-WORKDIR /var/www/authorization
+WORKDIR /var/www/app
+
+COPY . .
+
+RUN composer install
 
 # USER $user
 
